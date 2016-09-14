@@ -1,0 +1,63 @@
+#############################################################################################
+
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which the length is 3.
+
+Given "bbbbb", the answer is "b", with the length of 1.
+
+Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+##############################################################################################
+
+use array record[] to record the character that appeared before and the time complexity is O(n) 
+
+Difficulty: Medium
+
+##############################################################################################
+
+class Solution {
+public:
+	int lengthOfLongestSubstring(string s) {
+		bool record[256];
+		for (int i = 0; i < 256; i++){
+			record[i] = false;
+		}
+		int len = s.length();
+		int MaxLen = -1;
+		int tmp = 0;
+		int current = 0;
+		int start = 0;
+		int loc[256] = { 0 };
+		while (current < len){
+			if (record[s[current]] == false){
+				tmp++;
+				record[s[current]] = true;
+				loc[s[current] ] = current;
+				current++;
+			}
+			else{
+				if (tmp > MaxLen){
+					MaxLen = tmp;
+				}
+				int rep = loc[s[current] ];
+				tmp = current - rep;
+				for (int j = start; j <= rep; j++){
+					record[s[j] ] = false;
+					loc[s[j] ] = -1;
+				}
+				start = rep + 1;
+				loc[s[current] ] = current;
+				record[s[current] ] = true;
+				current++;
+			}
+		}
+		if (MaxLen < tmp){
+			MaxLen = tmp;
+			}
+	
+		return MaxLen;
+	}
+};

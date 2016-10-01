@@ -1,0 +1,98 @@
+/*
+**Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+**For "(()", the longest valid parentheses substring is "()", which has length = 2.
+**Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
+*/
+开始只是想到模拟栈，再全部搜寻一遍，O(2n)的复杂度
+python：
+class Solution(object):
+    def longestValidParenthese(self,s,len):
+       # len=
+        record={}
+        current=0
+        c=0
+        for i in range(len):
+            if s[i]=='(':
+                current+=1
+                c=current-1
+                tmp=[i,"up"]
+                print(tmp,current)
+            if s[i]==')':
+                current-=1
+                c=current
+                tmp=[i,"down"]
+                print(tmp,current)
+            if c in record:
+                record[c].append(tmp)
+            else:
+                record[c]=[tmp]
+        print(record)
+        return record
+
+def getAns(record):
+    max=0
+    for key in record:
+        flag1=0
+        last=-1
+        lastLen=0
+        for elem in record[key]:
+            if elem[1]=="up"and flag1==0:#flag1=0 means no up before
+                flag1=1
+                if elem[0]==5:
+                    l=1
+                if last!=(elem[0]-1):
+                    lastLen=0
+                last=elem[0]
+            if elem[1]=="up" and flag1==1:
+                last=elem[0]
+            if elem[1]=="down" and flag1==0:
+                lastLen=0
+            if elem[1]=="down" and flag1==1:#flag1=1 means one up waiting for matching
+                flag1=0
+                tmp=elem[0]-last+1+lastLen
+                if tmp>=max:
+                    max=tmp
+                    print(elem[0],last,lastLen)
+                last=elem[0]
+                lastLen=tmp
+    print(max)
+    return max
+
+if __name__=='__main__':
+    S=Solution
+    record=Solution.longestValidParenthese(S,"(()",3)
+    max=getAns(record)
+
+然后速度太慢且太长代码了，看了网上讨论得到提示，栈可以放坐标，然后遇到“)”弹栈，用一个vector记录上一个valid parenthese的长度，速度快了一些：
+c++：
+
+class Solution {
+public:
+	int longestValidParentheses(string s) {
+		int len = s.length();
+		stack<int>stk;
+		int max = 0;
+		int lastLen = 0;
+		vector<int>v;
+		for (int i = 0; i < len; i++){
+			if (s[i] == '('){
+				stk.push(i);
+				v.push_back(0);
+			}
+			if (s[i] == ')'){
+				if (stk.empty()){
+					v.push_back(0);
+				}
+				else{
+					int tmp = stk.top();
+					stk.pop();
+						int Len = i - tmp + 1 + v[tmp-1];
+						v.push_back(Len);
+						if (Len >= max)
+							max = Len;
+				}
+			}
+		}
+		return max;
+	}
+};

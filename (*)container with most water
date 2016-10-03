@@ -1,0 +1,20 @@
+class Solution{
+public:
+	int min(int x, int y){
+		if (x <= y)return x;
+		else return y;
+	}
+	int maxArea(vector<int>&v){
+		int l = 0;
+		int r = v.size() - 1;
+		int max = 0;
+		while (l < r){
+			int tmp = min(v[r], v[l])*(r - l);
+			if (max < tmp)
+				max = tmp;
+			if (v[l] < v[r])l++;
+			else r--;
+		}
+		return max;
+	}
+};

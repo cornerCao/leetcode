@@ -1,0 +1,46 @@
+class myNum{
+public:
+	int h;
+	int loc;
+	myNum(int H, int l) :h(H), loc(l){}
+};
+class Solution{
+public:
+	int largestRectangleArea(vector<int>&v){
+		v.push_back(0);
+		stack<myNum>stk;
+		int len = v.size();
+		int max = 0;
+		for (int i = 0; i < len; i++){
+			if (stk.empty())
+				stk.push(myNum(v[i], i));
+			else{
+				int head = stk.top().h;
+				if (head <= v[i]){
+					stk.push(myNum(v[i], i));
+				}
+				else{
+					//int cnt = 1;
+					int top = 0;
+					while ((!stk.empty()) && stk.top().h > v[i]){
+						if (!stk.empty()){
+							int tmp = (i - stk.top().loc)*stk.top().h;
+							top = stk.top().loc;
+							if (tmp >= max)
+								max = tmp;
+							stk.pop();
+						}
+					}
+					if (stk.empty()){
+						stk.push(myNum(v[i], top));
+
+					}
+					else{
+						stk.push(myNum(v[i], top));
+					}
+				}
+			}
+		}
+		return max;
+	}
+};

@@ -1,0 +1,30 @@
+class Solution {
+public:
+	int longestValidParentheses(string s) {
+		int len = s.length();
+		stack<int>stk;
+		int max = 0;
+		int lastLen = 0;
+		vector<int>v;
+		for (int i = 0; i < len; i++){
+			if (s[i] == '('){
+				stk.push(i);
+				v.push_back(0);
+			}
+			if (s[i] == ')'){
+				if (stk.empty()){
+					v.push_back(0);
+				}
+				else{
+					int tmp = stk.top();
+					stk.pop();
+						int Len = i - tmp + 1 + v[tmp-1];
+						v.push_back(Len);
+						if (Len >= max)
+							max = Len;
+				}
+			}
+		}
+		return max;
+	}
+};

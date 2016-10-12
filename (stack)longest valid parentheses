@@ -1,3 +1,8 @@
+/*Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+For "(()", the longest valid parentheses substring is "()", which has length = 2.
+Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
+用栈存放上一个开始的长度 如果栈空则停止累加 复杂度O(n) 之前单纯用栈模拟这个过程复杂度比较高
+*/
 class Solution {
 public:
 	int longestValidParentheses(string s) {

@@ -1,3 +1,7 @@
+/*Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, 
+find the area of largest rectangle in the histogram.
+Above is a histogram where width of each bar is 1, given height = [2,1,5,6,2,3].
+其实就是找连续的不低于某个高度的面积，用栈存储一个递增的高度 和位置，发现矮的地方就弹栈*/
 class myNum{
 public:
 	int h;

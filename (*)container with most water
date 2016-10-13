@@ -1,3 +1,8 @@
+/*Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). 
+n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). 
+Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+双指针 采用贪心的策略，先从两边开始，因为要求尽量大的min(v[r],v[l])*(r-l)，而如果指针往小的那边移，r-l还会变小，那么得到的值不可能比原来的大，所以贪心
+往大的那边移动，从而O(n)复杂度，最开始只想到枚举所有可能性O(n2)复杂度*/
 class Solution{
 public:
 	int min(int x, int y){

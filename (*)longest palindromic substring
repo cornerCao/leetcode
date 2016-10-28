@@ -1,1 +1,90 @@
-to be finished
+/*Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+由于S长度不大，可以用O(n2)复杂度解决，以每个字符为中心向两边延伸*/
+/*****************************************我的方法*****************************************/
+因为想避免分类讨论奇数偶数长度字符串的情况， 想在原来的字符串中加*来 把两种情况合在一起，然而这样增加存储空间，增加了复杂度且导致很多问题出现，于是
+调了很久的代码
+class Solution{
+public:
+	string longestPalindrome(string s){
+		string ss = "";
+		int len = s.length();
+		for (int i = 0; i<len; i++){//在字符之间全部加上*
+			if (i == len - 1)ss += s[i];
+			else ss = ss+s[i] + '*';
+		}
+		int Len = ss.length();
+		int max = 1;
+		int res = 0;
+		for (int i = 0; i<Len; i++){
+			int tmp = 1;
+			int j = 1;
+			for (j = 1; j <= i&&j + i<Len; j++){
+				if (ss[i - j] == ss[i + j]){
+					tmp += 2;
+					if (j + i == Len - 1)break;//因为到了边上的时候不会进行下去 j++了但是不会进到else来j--导致j总是多1 这也导致了很多问题
+				}
+				else{	//因为 y多加了1
+					j--;
+					break;
+				}
+			}			
+			if (i-j>=0&&ss[i-j] == '*'){//还要讨论如果最边上是*就要去掉，长度-2
+				tmp -= 2;
+				j--;
+			}
+			if (tmp>max){
+				res = i - j;
+				max = tmp;
+			}
+		}
+		return s.substr((res) / 2, max / 2 + 1);
+	}
+};
+//运行时间89ms，还调了很长时间，原因是考虑问题不够周全，以后有空再多写几次
+/**********************************同样的想法 简便写法 别人家的代码**************************************/
+//用好双指针啊！！！
+class Solution2 {
+public:
+	string longestPalindrome(string s) {
+		if (s.length() == 0 || s.length() == 1)return s;
+		string max = "";
+		max = max + s[0];
+		for (int i = 0; i< s.length() - 1; i++){
+			string first = helper(s, i, i);//helper返回的是以i位中间值向两边延伸的最长 回文串
+			if (first.length() > max.length())max = first;
+
+			string second = helper(s, i, i + 1);
+			if (second.length() > max.length())max = second;
+		}
+		return max;
+	}
+
+	string helper(string s, int left, int right){
+		while (left >= 0 && right < s.length() && s[right] == s[left]){//用左右指针
+			left--;
+			right++;
+		}
+		return s.substr(left + 1, right - 1 - left);
+	}
+};
+//时间59ms 算法都是O(n2)但是省掉了加*的过程和长度 简单了很多
+/*******************************************更巧妙的想法*************************************/
+考虑到中间有相同值肯定能算进去，skip掉相同的值
+string longestPalindrome(string s) {
+    if (s.empty()) return "";
+    if (s.size() == 1) return s;
+    int min_start = 0, max_len = 1;
+    for (int i = 0; i < s.size();) {
+      if (s.size() - i <= max_len / 2) break;
+      int j = i, k = i;
+      while (k < s.size()-1 && s[k+1] == s[k]) ++k; // Skip duplicate characters.
+      i = k+1;
+      while (k < s.size()-1 && j > 0 && s[k + 1] == s[j - 1]) { ++k; --j; } // Expand.
+      int new_len = k - j + 1;
+      if (new_len > max_len) { min_start = j; max_len = new_len; }
+    }
+    return s.substr(min_start, max_len);
+}
+//时间7ms 简直完美。。。还避掉了奇数偶数的情况 学习一个
+
+

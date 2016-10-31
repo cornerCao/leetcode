@@ -1,0 +1,35 @@
+/*就是找三个数的和最接近target，因为刚刚写了3sum，一遍ac嘿嘿*/
+class Solution {
+public:
+    int abs(int a){
+        if(a<0)return -a;
+        else return a;
+    }
+    bool isbetter(int a,double b,int targ){
+        if(b==-0.5)return true;
+        if(abs(a-targ)<abs(b-targ))return true;
+        return false;
+    }
+    int threeSumClosest(vector<int>& nums, int target) {
+        int len=nums.size();
+        sort(&nums[0],&nums[len]);
+        double ans=-0.5;
+        for(int i=0;i<len-2;i++){
+            int tmp=100000;
+            if(i>0&&nums[i]==nums[i-1])continue;
+            int l=i+1;
+            int r=len-1;
+            for(;l<len-1&&l<r;l++){
+            int targ=target-nums[i];
+            while(l<r&&nums[r]>targ-nums[l]){
+                r--;
+            }
+            if(l<r)tmp=(nums[i]+nums[l]+nums[r]);
+            if(r+1<len){
+            int t=(nums[i]+nums[l]+nums[r+1]);
+            if(isbetter(t,tmp,target))tmp=t;}
+            if(isbetter(tmp,ans,target))ans=tmp;
+        }
+    }
+    return ans;}
+};

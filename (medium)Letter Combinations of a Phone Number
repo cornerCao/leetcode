@@ -1,0 +1,85 @@
+/*
+*Given a digit string, return all possible letter combinations that the number could represent.
+*A mapping of digit to letters (just like on the telephone buttons) is given below.
+*其实就是给一串数字，在电话键上有对应的字母，求对应所有的字母串
+*/
+class Solution {
+public:
+	vector<string> letterCombinations(string digits) {
+		string table[8]={"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+		vector<string>v;
+		vector<int>num;
+		vector<int>index;
+		string tmp = "";
+		int len = digits.length();
+		for (int i = 0; i<len; i++){
+			if (digits[i] <= '9'&&digits[i] >= '2'){
+				num.push_back(digits[i] - '2');//num数组是对应的数字
+				index.push_back(0);//index数组是每个数字对应的index值
+			}
+		}
+		len = num.size();
+		while (1){//想模拟从最低位一步步加一进位到最高位的过程，从而遍历所有的可能性
+			if (len == 0)break;
+			for (int i = 0; i<len; i++){
+				tmp = tmp + table[i][index[i]];
+			}
+			v.push_back(tmp);
+			tmp = "";
+			int t = len - 1;
+			index[t] += 1;
+			while (t>0 && index[t] >= table[t].length()){
+				index[t] = 0;
+				t--;
+				index[t] += 1;
+			}
+			if (t<0)break;
+			if (t == 0 && index[t] >= table[t].length())break;
+		}
+		return v;
+	}
+};
+/*******************************其实有更容易想的方法，比如深搜*********************************/
+class Solution {
+public:
+	vector<string> letterCombinations(string digits) {
+	    string table[10]={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+		vector<string>v;
+		if(digits.length()==0)return v;
+		vector<string>tmp=letterCombinations(digits.substr(1,digits.length()-1));
+		int len=tmp.size();
+		for(int i=0;i<table[digits[0]-'0'].length();i++){
+		    string ans=" ";
+		    ans[0]=table[digits[0]-'0'][i];
+		    if(len==0)v.push_back(ans);
+		    else{
+		    for(int j=0;j<len;j++){
+		        //ans=ans+tmp[j];
+		        v.push_back(ans+tmp[j]);
+		    }
+		    }
+		}
+		return v;
+	}
+};
+/*************************当然还有更绝妙简便的方法***************************************/
+if '' == digits: return []
+    kvmaps = {
+        '2': 'abc',
+        '3': 'def',
+        '4': 'ghi',
+        '5': 'jkl',
+        '6': 'mno',
+        '7': 'pqrs',
+        '8': 'tuv',
+        '9': 'wxyz'
+    }
+    ret=['']
+    for c in digits:
+        tmp=[]
+        for y in ret:
+            for x in kvmaps[c]:
+                tmp.append(y+x)
+        ret=tmp
+    
+    return ret;

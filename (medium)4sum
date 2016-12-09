@@ -1,0 +1,40 @@
+/*就是找数组中四个数字加起来等于目标 注意结果要除掉相同的组合 所以遇到相同的值可以略过也可以提高了速度*/
+class Solution {
+public:
+vector<vector<int>>v;
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        int len=nums.size();
+        sort(&nums[0],&nums[len]);
+        int r=len-1;
+        int l=0;
+        while(r>2){//注意 被坑的是之前一直携程l<r不要思维定式了啊
+        l=0;//注意！ 一定要先清零
+        while(l<r-2){
+        TRY(nums,target-nums[l]-nums[r],l+1,r-1,nums[l],nums[r]);
+        while(nums[l+1]==nums[l])l++;//相同的值省略过 已经搜过了
+                l++;
+        }
+        while(nums[r-1]==nums[r])r--;
+                r--;
+        }
+        return v;
+    }
+    void TRY(vector<int>& nums, int target,int l,int r,int v1,int v4){
+        while(l<r){
+            if(nums[l]+nums[r]==target){
+                vector<int>vv;
+                vv.push_back(v1);
+                vv.push_back(nums[l]);
+                vv.push_back(nums[r]);
+                vv.push_back(v4);
+                v.push_back(vv);
+                while(nums[l+1]==nums[l])l++;//避免重复值
+                l++;
+                while(nums[r-1]==nums[r])r--;
+                r--;
+            }
+            else if(nums[l]+nums[r]<target)l++;
+            else if(nums[l]+nums[r]>target)r--;
+        }
+    }
+};

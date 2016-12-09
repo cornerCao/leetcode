@@ -1,0 +1,26 @@
+/*就是给出一个数字作为括号的个数，列出所有可能的这么多个括号的合法的组合
+如n=3
+[
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+]
+*/
+class Solution {
+public:
+    vector<string>v;
+    vector<string> generateParenthesis(int n) {
+        TRY("",n,n);
+        return v;
+    }
+    void TRY(string s,int left,int right){
+        if(left==0&&right==0){
+            v.push_back(s);
+            return;
+        }
+        if(left>0)TRY(s+"(",left-1,right);
+        if(right>left)TRY(s+")",left,right-1);
+    }
+};

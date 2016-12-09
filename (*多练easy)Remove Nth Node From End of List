@@ -1,0 +1,25 @@
+/*经典链表题 但要注意边界条件一定要考虑清楚呀。。被卡了很久。。多练*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* cur=head;
+        while(n--)cur=cur->next;
+        if(!cur)return head->next;//说明要删的是头节点
+        ListNode*cur2=head;
+        while(cur->next){
+            cur2=cur2->next;
+            cur=cur->next;
+        }
+        ListNode*tmp=cur2->next->next;//得到的cur2是要删的上一个节点
+        cur2->next=tmp;
+        return head;
+    }
+};

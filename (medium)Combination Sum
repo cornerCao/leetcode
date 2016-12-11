@@ -1,0 +1,80 @@
+/*
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+The same repeated number may be chosen from C unlimited number of times.
+
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+For example, given candidate set [2, 3, 6, 7] and target 7, 
+A solution set is: 
+[
+  [7],
+  [2, 2, 3]
+]
+其实就是找数加起来等于target 其中数可以无限次重复
+因为想到每一次情况都一样 可以递归回溯 注意细节啊 被卡了很久因为递归边界条件不清还有i j 分不清
+但其实还可以优化
+*/
+class Solution {
+public:
+	vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+		vector<vector<int>>ans;
+		vector<int>cand;
+		int len = candidates.size();
+		sort(&candidates[0], &candidates[len-1]+1);
+		int j = 0;
+		cand.push_back(candidates[0]);
+		for (int i = 1; i<len; i++){
+			if (candidates[i] != cand[j]){//delete duplicate elements
+				j++;
+				cand.push_back(candidates[i]);
+			}
+		}
+		ans = TRY(cand, target,cand.size()-1);
+		return ans;
+	}
+	vector<vector<int>> TRY(vector<int>&num, int target,int r){
+		vector<vector<int>>v;
+		if (num[0] > target)return v;
+		if (num[0] == target){//一定要注意！这是递归边界 第一次写的时候把这里漏了。。
+			vector<int>tt;
+			tt.push_back(num[0]);
+			v.push_back(tt);
+			return v;
+		}
+		int pos = find(num, target);//其实可以不用二分查找 正着一个个遍历 直到num[i]>target就break就行了
+		if(r<pos)pos=r;
+		for (int i = pos; i >= 0; i--){
+			vector<vector<int>>tmp;
+			if (num[i] == target){
+				vector<int>tt;//头脑不要乱啊 每个vector要分清
+				tt.push_back(num[i]);
+				v.push_back(tt);
+			}
+			else{
+				tmp = TRY(num, target - num[i],i);
+				if (tmp.size() == 0)continue;
+				for (int j = 0; j < tmp.size(); j++){
+					tmp[j].push_back(num[i]);//i j的问题 以及注意小心
+					v.push_back(tmp[j]);
+				}
+			}
+		}
+		return v;
+	}
+	int find(vector<int>&num, int target){
+		int len = num.size();
+		int l = 0;
+		int r = len - 1;
+		int mid;
+		while (l<r){
+			mid = (l + r) / 2;
+			if (num[mid] == target)return mid;
+			if (num[mid]<target)l = mid + 1;
+			if (num[mid]>target)r = mid - 1;
+		}
+		if (num[l]>target)return l - 1;
+		return l;
+	}
+};

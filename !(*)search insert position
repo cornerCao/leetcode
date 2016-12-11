@@ -1,1 +1,29 @@
-http://www.kancloud.cn/digest/sgistl/111885
+/*
+Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+You may assume no duplicates in the array.
+
+Here are few examples.
+[1,3,5,6], 5 → 2
+[1,3,5,6], 2 → 1
+[1,3,5,6], 7 → 4
+[1,3,5,6], 0 → 0其实就是找第一个不小于target的位置，变形的binary search
+*/
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int len=nums.size();
+        int l=0;
+        int r=len-1;
+        int mid;
+        if(target>nums[r])return len;
+        while(l<r){
+            mid=(l+r)/2;
+            if(target==nums[mid])return mid;
+            if(target<nums[mid])r=mid;//这里不是mid-1了 因为可以保留大于target的数 所以不用-1
+            if(target>nums[mid])l=mid+1;
+        }
+      //  if(nums[l]<target)return l+1;
+        return l;
+    }
+};

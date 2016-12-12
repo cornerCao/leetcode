@@ -1,0 +1,46 @@
+/*
+The set [1,2,3,…,n] contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order,
+We get the following sequence (ie, for n = 3):
+
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+Given n and k, return the kth permutation sequence.
+就是输出第k个permutation序列 同样可以递归回溯 一位位判断
+*/
+class Solution {
+public:
+	string getPermutation(int n, int k) {
+		int feb=1;
+		for (int i = 2; i<n; i++){
+			feb*=i;
+		}
+		vector<int>nums;
+		for (int i = 0; i<n; i++){
+			nums.push_back(i + 1);
+		}
+		string ans = "";
+		dfs(ans, feb, 1, n, k - 1, nums);
+		return ans;
+	}
+	void dfs(string&ans, int feb, int begin, int n, int k, vector<int>&nums){
+		if (begin >= n){
+		    string s=" ";
+		    s[0]='0'+nums[0];
+			ans = ans +s; return;
+		}
+		int t = (k / feb);//比较是(n-begin)!的几倍确定每一位数字是多少
+		k = k%feb;
+		 string ss=" ";
+		    ss[0]='0'+nums[t];
+		ans = ans +ss;//注意string+string才行
+		vector<int>::iterator it = nums.begin() + t;
+		nums.erase(it);
+		dfs(ans, feb/(n-begin), begin + 1, n, k, nums);
+	}
+};

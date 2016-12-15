@@ -1,0 +1,48 @@
+/*
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+For example:
+A = [2,3,1,1,4], return true.
+
+A = [3,2,1,0,4], return false.
+判断能不能走到最后，最经典的动归问题，当时用暴力递归直接超时，就是想不到动归。。
+因为每个值表示的是最大的步数，所以reach之前的点都可以保证走得到
+*/
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int len=nums.size();
+        int reach=0;
+        for(int i=0;i<len&&i<=reach;i++){//reach表示能走到的全局最优
+            if(reach<i+nums[i])reach=i+nums[i];//i+num[i]表示局部最优
+        }
+        if(reach>=len-1)return true;
+        return false;
+    }
+};
+//进阶版 这个是自己想出来的哈哈哈哈哈！
+//最开始是用我为人人的递归 倒着递归 但超时 改成了这样就过了哈哈哈
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int len=nums.size();
+        vector<int>v(len,-1);
+        v[0]=0;
+        int reach=0;
+        for(int i=0;i<len&&i<=reach;i++){
+            if(i+nums[i]>reach){
+               // reach=i+nums[i];
+                for(int j=reach;j<=i+nums[i]&&j<len;j++){//因为可以证明在reach之前肯定是步数最小的部分 所以只用更新reach到新的reach之间的就可以了
+                    if(v[j]<0)v[j]=v[i]+1;
+                    else if(v[j]>v[i]+1)v[j]=v[i]+1;
+                }
+                reach=i+nums[i];
+            }
+        }
+        return v[len-1];
+    }
+};

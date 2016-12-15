@@ -1,0 +1,40 @@
+/*Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+For example,
+Given the following matrix:
+
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+You should return [1,2,3,6,9,8,7,4,5].
+就是螺旋形遍历数组 看起来简单的问题卡了很久。。多练啊，一定要考虑边界情况！！！要记得写完代码以后先把特殊的情况试一遍*/
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int>ans;
+        int m1,m2,n1,n2;
+        m1=0;n1=0;
+        n2=matrix.size();
+        if(n2==0)return ans;
+        m2=matrix[0].size();
+        int i=0,j=0;
+        while(m1<m2&&n1<n2){
+            i=m1;//m1 n2是初始值 一定要在开头初始化
+            j=n1;
+            for(i=m1;i<m2;i++)ans.push_back(matrix[j][i]);
+            i=m2-1;//很重要 因为i会变成m2! 要记得减一
+            for(j=n1+1;j<n2;j++)ans.push_back(matrix[j][i]);
+            j=n2-1;
+            if(n1+1>=n2)break;//判断一下 否则有可能重复！！！所以写完代码要举一些特殊情况考虑
+            if(m1+1>=m2)break;
+            for(i=m2-2;i>=m1;i--)ans.push_back(matrix[j][i]);
+            i=m1;
+            for(j=n2-2;j>n1;j--)ans.push_back(matrix[j][i]);
+            j=n1+1;
+            m1++;m2--;n1++;n2--;
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,39 @@
+/*
+Given a list, rotate the list to the right by k places, where k is non-negative.
+
+For example:
+Given 1->2->3->4->5->NULL and k = 2,
+return 4->5->1->2->3->NULL.
+其实就是理解题意，这题最大的坑就是k有可能大于链表的长度，所以要求出链表的长度len，然后k%len
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(!head)return head;
+        int len=0;
+        ListNode*c=head;
+        while(c){//求出链表的长度然后k%len
+            c=c->next;
+            len++;
+        }
+        k=k%len;
+        if(k==0)return head;
+        int tmp=len-k-1;
+        ListNode*cur=head;
+        while(tmp--)cur=cur->next;
+        ListNode*newh=cur->next;
+        cur->next=NULL;
+        cur=newh;
+        while(cur->next)cur=cur->next;
+        cur->next=head;
+        return newh;
+    }
+};
